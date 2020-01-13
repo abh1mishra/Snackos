@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "886626801317",
+    "firebase_url": "https://snackos-dbff8.firebaseio.com",
+    "project_id": "snackos-dbff8",
+    "storage_bucket": "snackos-dbff8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886626801317:android:f713adb7e11f06c47f1f4c",
+        "android_client_info": {
+          "package_name": "com.example.snackos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886626801317-8f0tpsmcv0p571rarudc0rrfvjl17tdl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBu9_iYn-Th8dzdqmI9t70mpQSkmQZnKz0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886626801317-8f0tpsmcv0p571rarudc0rrfvjl17tdl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
