@@ -53,8 +53,8 @@ public void postFree(View v){
     snackosAddressref.push().setValue(map);
     Button button =(Button) findViewById(R.id.button);
     Button button2 =(Button) findViewById(R.id.button2);
-    button.setAlpha(0.0f);
-    button2.setAlpha(0.0f);
+    button.setVisibility(View.INVISIBLE);
+    button2.setVisibility(View.INVISIBLE);
     Toast.makeText(this,"ThankYou!! Order on its way",Toast.LENGTH_LONG).show();
 
 }
@@ -171,6 +171,10 @@ public void postFree(View v){
                 catch (Exception e){
                     Log.i("Yup",e.getMessage());
                 }
+                Button button =(Button) findViewById(R.id.button);
+                Button button2 =(Button) findViewById(R.id.button2);
+                button.setVisibility(View.INVISIBLE);
+                button2.setVisibility(View.INVISIBLE);
             }
             else if("Payment cancelled by user.".toLowerCase().equals(paymentCancel.toLowerCase())) {
                 Toast.makeText(this, "Payment cancelled by user.", Toast.LENGTH_SHORT).show();
