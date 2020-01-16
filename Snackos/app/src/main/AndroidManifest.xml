@@ -11,9 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Address"></activity>
-        <activity android:name=".items" />
-        <activity android:name=".MainActivity">
+<!--        <activity android:name=".preOrder" ></activity>-->
+        <activity android:name=".Address"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".items"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

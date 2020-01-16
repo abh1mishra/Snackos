@@ -1,34 +1,34 @@
 {
   "project_info": {
-    "project_number": "886626801317",
-    "firebase_url": "https://snackos-dbff8.firebaseio.com",
-    "project_id": "snackos-dbff8",
-    "storage_bucket": "snackos-dbff8.appspot.com"
+    "project_number": "113798715578",
+    "firebase_url": "https://snackos-8787b.firebaseio.com",
+    "project_id": "snackos-8787b",
+    "storage_bucket": "snackos-8787b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:886626801317:android:f713adb7e11f06c47f1f4c",
+        "mobilesdk_app_id": "1:113798715578:android:4a42db9f4e5fbdb7c6ca83",
         "android_client_info": {
           "package_name": "com.example.snackos"
         }
       },
       "oauth_client": [
         {
-          "client_id": "886626801317-8f0tpsmcv0p571rarudc0rrfvjl17tdl.apps.googleusercontent.com",
+          "client_id": "113798715578-v85cba01tbsigigsdv4c9tge5cl3b6bb.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBu9_iYn-Th8dzdqmI9t70mpQSkmQZnKz0"
+          "current_key": "AIzaSyAAtv8Y5Cuf4UdJVicZlsC4EuRMKwrbCJU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "886626801317-8f0tpsmcv0p571rarudc0rrfvjl17tdl.apps.googleusercontent.com",
+              "client_id": "113798715578-v85cba01tbsigigsdv4c9tge5cl3b6bb.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

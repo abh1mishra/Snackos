@@ -3,14 +3,17 @@ package com.example.snackos;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,8 +32,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class items extends AppCompatActivity {
+    private String parentMessage;
     private FirebaseDatabase snackosmenudb= FirebaseDatabase.getInstance();
-    private DatabaseReference snackosmenuref = snackosmenudb.getReference().child("menu");
+
 TextView t1;
 ImageView I2;
     LinearLayout containerCopy;
@@ -38,12 +42,47 @@ ImageView I2;
     LinearLayout.LayoutParams image1Params;
     ImageView I1;
     ImageView I3;
-
+    String numberValue[];
+    String itemList[];
+    ArrayList<pack> packs;
 
 public void checkOut(View v){
+    try{
+item[] s=new item[purchasedList.size()];
+ArrayList<item> as=new ArrayList<>();
+        for (Map.Entry itemo : purchasedList.entrySet()) {
+            as.add((item)itemo.getValue());
+                    }
+        for(int i=0;i<as.size();i++){
+            s[i]=as.get(i);
+        }
 
+numberValue =new String[s.length];
+itemList=new String[s.length];
+Integer totalPrice=0;
+for(int i=0;i<s.length;i++){
+    numberValue[i]=new Integer(s[i].getNumber()).toString();
+
+    itemList[i]=s[i].getName();
+}
     Intent myIntent = new Intent(items.this, Address.class);
-    items.this.startActivity(myIntent);
+myIntent.putExtra("item",itemList);
+if(parentMessage.equals("menu")){
+myIntent.putExtra("key","Address");}
+if(parentMessage.equals("preOrder")){
+myIntent.putExtra("key","preOrderAddress");}
+myIntent.putExtra("number",numberValue);
+    for (Map.Entry itemo : purchasedList.entrySet()) {
+        pack p=packs.get((Integer) itemo.getKey());
+        item io=(item)itemo.getValue();
+        totalPrice+=(Integer.parseInt(p.getPrice())*(io.getNumber()));
+    }
+myIntent.putExtra("price",totalPrice);
+    items.this.startActivity(myIntent);}
+    catch (Exception e){
+        Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG).show();
+        e.printStackTrace();
+    }
 }
     private class orderedImage{
         Integer number;
@@ -62,7 +101,7 @@ public void checkOut(View v){
     private class item{
         int number;
         String name;
-        private item(int i,int o, String s){
+        private item(int i, String s){
             this.number=i;
             this.name=s;
         }
@@ -75,6 +114,7 @@ public void checkOut(View v){
         private void incrementNumber(){
 this.number++;
         }
+
         private void decrementNumber(){
             if(this.number>0){
             this.number--;}
@@ -137,7 +177,8 @@ public void updateUi(){
         // Add some bonus marks
         // to all the students and print it
         item i=(item) itemo.getValue();
-        message+=(i.getName()+" : "+i.getNumber()+"\n");
+        if(i.getNumber()>0){
+        message+=(i.getName()+" : "+i.getNumber()+"\n");}
     }
     t.setText(message);
 }
@@ -145,10 +186,31 @@ public void updateUi(){
     @Override
     protected void onStart() {
         super.onStart();
+        parentMessage=getIntent().getExtras().getString("key");
+        DatabaseReference snackosmenuref = snackosmenudb.getReference().child(parentMessage);
+        if(parentMessage.equals("preOrder")){
+        DatabaseReference snackosAbirNote = snackosmenudb.getReference().child("AbirNote");
+        snackosAbirNote.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                TextView t=(TextView) findViewById(R.id.AbirNote);
+                String s="Terms and Conditions \n";
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    s+=(ds.getKey()+" : "+ds.getValue(String.class)+"\n");
+                }
+                t.setText(s);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        }
         snackosmenuref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<pack> packs=new ArrayList<>();
+                packs=new ArrayList<>();
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     pack p=new pack(ds.getValue(Long.class).toString(),ds.getKey());
                     packs.add(p);
@@ -158,7 +220,7 @@ initUi(packs);
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+Toast.makeText(items.this,"Hello",Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -177,7 +239,8 @@ initUi(packs);
             I1= new ImageView(this);
 //
             I1.setLayoutParams(image1Params);
-            new downloadImage().execute(i);
+//            new downloadImage().execute(i);
+            I1.setImageResource(R.drawable.dish);
             Log.i("SEE",""+getResources().getDisplayMetrics().density);
             LinearLayout.LayoutParams t1Params = new LinearLayout.LayoutParams(dp2p(290),dp2p(50),1f);
             LinearLayout.LayoutParams i2Params = new LinearLayout.LayoutParams(dp2p(80),dp2p(50),1f);
@@ -186,9 +249,10 @@ initUi(packs);
             t1.setLayoutParams(t1Params);
             t1.setText(p.get(i).getName()+"\n"+"Price:"+p.get(i).getPrice());
             t1.setGravity(Gravity.CENTER);
+            t1.setTypeface(null, Typeface.BOLD);
             I2= new ImageView(this);
             I2.setTag(i);
-            I2.setImageResource(R.drawable.plus);
+            I2.setImageResource(R.drawable.plus_1);
             I2.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -199,7 +263,7 @@ initUi(packs);
                         purchasedList.get(v.getTag()).incrementNumber();
                     }
                     else{
-                        purchasedList.put(Integer.parseInt(v.getTag().toString()),new item(1,Integer.parseInt(v.getTag().toString()),t.getText().toString()));
+                        purchasedList.put(Integer.parseInt(v.getTag().toString()),new item(1,packs.get(Integer.parseInt(v.getTag().toString())).getName()));
                     }
                     updateUi();
 //Log.i("HelloSeeMee",purchasedList.get(Integer.parseInt(v.getTag().toString())).getName()+purchasedList.get(Integer.parseInt(v.getTag().toString())).getNumber());
@@ -222,7 +286,7 @@ initUi(packs);
             });
 //        I3.setScaleType(ImageView.ScaleType.FIT_XY);
             I3.setLayoutParams(i3Params);
-            I3.setImageResource(R.drawable.minus);
+            I3.setImageResource(R.drawable.minus_1);
             containerCopy.addView(I1);
             containerCopy.addView(t1);
             containerCopy.addView(I2);
@@ -233,7 +297,8 @@ initUi(packs);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
+        getSupportActionBar().hide(); //hide the title bar
         setContentView(R.layout.activity_items);
-//        LinearLayout container= findViewById(R.id.container);
             }
 }
