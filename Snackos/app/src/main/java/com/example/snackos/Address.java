@@ -30,33 +30,22 @@ String[] nameItem;
 String[] numberItem;
 String parentMessage;
     private FirebaseDatabase snackosAddressdb= FirebaseDatabase.getInstance();
-public void Post(View v){
-    TextView note=(TextView) findViewById(R.id.note);
-    String notes=note.getText().toString();
-    payUsingUpi("ArcherAk",pr.toString(),"abirkanjilal1998@oksbi",notes);
-}
-public void postFree(View v){
-    TextView number=(TextView)findViewById(R.id.phone);
-    TextView address=(TextView)findViewById(R.id.address);
-    TextView name=(TextView)findViewById(R.id.name);
-    String num=number.getText().toString();
-    String nam=name.getText().toString();
-    String hostel=address.getText().toString();
-    map.put("name",nam);
-    map.put("Hostel",hostel);
-    map.put("phone",num);
-    map.put("price",pr+"");
-    for(int i=0;i<numberItem.length;i++){
-        map.put(nameItem[i],numberItem[i]);
-    }
-    DatabaseReference snackosAddressref = snackosAddressdb.getReference().child(parentMessage);
-    snackosAddressref.push().setValue(map);
-    Button button =(Button) findViewById(R.id.button);
-    Button button2 =(Button) findViewById(R.id.button2);
-    button.setVisibility(View.INVISIBLE);
-    button2.setVisibility(View.INVISIBLE);
-    Toast.makeText(this,"ThankYou!! Order on its way",Toast.LENGTH_LONG).show();
 
+    public static boolean isConnectionAvailable(Context context) {
+        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+            return netInfo != null && netInfo.isConnected()
+                    && netInfo.isConnectedOrConnecting()
+                    && netInfo.isAvailable();
+        }
+        return false;
+    }
+
+public void Post(View v){
+    TextView note = findViewById(R.id.note);
+    String notes=note.getText().toString();
+    payUsingUpi("Abir Kanjilal", pr.toString(), "Q66503314@ybl", notes);
 }
 
     private void payUsingUpi(String nam, String s, String upiId, String notes) {
@@ -116,6 +105,31 @@ public void postFree(View v){
                 break;
         }
     }
+
+    public void postFree(View v) {
+        TextView number = findViewById(R.id.phone);
+        TextView address = findViewById(R.id.address);
+        TextView name = findViewById(R.id.name);
+        String num = number.getText().toString();
+        String nam = name.getText().toString();
+        String hostel = address.getText().toString();
+        map.put("name", nam);
+        map.put("Hostel", hostel);
+        map.put("phone", num);
+        map.put("price", pr + "");
+        for (int i = 0; i < numberItem.length; i++) {
+            map.put(nameItem[i], numberItem[i]);
+        }
+        DatabaseReference snackosAddressref = snackosAddressdb.getReference().child(parentMessage);
+        snackosAddressref.push().setValue(map);
+        Button button = findViewById(R.id.button);
+        Button button2 = findViewById(R.id.button2);
+        button.setVisibility(View.INVISIBLE);
+        button2.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, "ThankYou!! Order on its way", Toast.LENGTH_LONG).show();
+
+    }
+
     private void upiPaymentDataOperation(ArrayList<String> data) {
     Log.i("Enter",data.toString());
         if (isConnectionAvailable(this)) {
@@ -126,9 +140,9 @@ public void postFree(View v){
             if(str == null) str = "discard";
             String status = "";
             String approvalRefNo = "";
-            String response[] = str.split("&");
+            String[] response = str.split("&");
             for (int i = 0; i < response.length; i++) {
-                String equalStr[] = response[i].split("=");
+                String[] equalStr = response[i].split("=");
                 if(equalStr.length >= 2) {
                     if (equalStr[0].toLowerCase().equals("Status".toLowerCase())) {
                         status = equalStr[1].toLowerCase();
@@ -147,9 +161,9 @@ public void postFree(View v){
 //                snackosAddressref.push().setValue(map);
                 Toast.makeText(this, "Transaction successful.", Toast.LENGTH_SHORT).show();
                 Log.e("UPI", "payment successfull: "+approvalRefNo);
-                TextView number=(TextView)findViewById(R.id.phone);
-                TextView address=(TextView)findViewById(R.id.address);
-                TextView name=(TextView)findViewById(R.id.name);
+                TextView number = findViewById(R.id.phone);
+                TextView address = findViewById(R.id.address);
+                TextView name = findViewById(R.id.name);
                 String num=number.getText().toString();
                 String nam=name.getText().toString();
                 String hostel=address.getText().toString();
@@ -160,7 +174,7 @@ public void postFree(View v){
                 for(int i=0;i<numberItem.length;i++){
                     map.put(nameItem[i],numberItem[i]);
                 }
-                map.put("TXN",data.get(0).toString());
+                map.put("TXN", data.get(0));
 
                 try{
                     DatabaseReference snackosAddressref = snackosAddressdb.getReference().child(parentMessage);
@@ -171,8 +185,8 @@ public void postFree(View v){
                 catch (Exception e){
                     Log.i("Yup",e.getMessage());
                 }
-                Button button =(Button) findViewById(R.id.button);
-                Button button2 =(Button) findViewById(R.id.button2);
+                Button button = findViewById(R.id.button);
+                Button button2 = findViewById(R.id.button2);
                 button.setVisibility(View.INVISIBLE);
                 button2.setVisibility(View.INVISIBLE);
             }
@@ -189,18 +203,6 @@ public void postFree(View v){
             Toast.makeText(this, "Internet connection is not available. Please check and try again", Toast.LENGTH_SHORT).show();
         }
     }
-    public static boolean isConnectionAvailable(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (connectivityManager != null) {
-            NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()
-                    && netInfo.isConnectedOrConnecting()
-                    && netInfo.isAvailable()) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,7 +215,7 @@ public void postFree(View v){
             if(pr<130){
                 pr+=10;
             }
-            TextView am=(TextView) findViewById(R.id.amount);
+            TextView am = findViewById(R.id.amount);
             am.setText("Amount: "+pr);
             nameItem=getIntent().getExtras().getStringArray("item");
             numberItem=getIntent().getStringArrayExtra("number");

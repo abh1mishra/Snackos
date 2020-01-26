@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -34,7 +36,7 @@ import java.util.Map;
 public class items extends AppCompatActivity {
     private String parentMessage;
     private FirebaseDatabase snackosmenudb= FirebaseDatabase.getInstance();
-
+    float stopLoading = 0.0f;
 TextView t1;
 ImageView I2;
     LinearLayout containerCopy;
@@ -42,9 +44,10 @@ ImageView I2;
     LinearLayout.LayoutParams image1Params;
     ImageView I1;
     ImageView I3;
-    String numberValue[];
-    String itemList[];
+    String[] numberValue;
+    String[] itemList;
     ArrayList<pack> packs;
+    TextView loading;
 
 public void checkOut(View v){
     try{
@@ -193,7 +196,8 @@ public void updateUi(){
         snackosAbirNote.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                TextView t=(TextView) findViewById(R.id.AbirNote);
+
+                TextView t = findViewById(R.id.AbirNote);
                 String s="Terms and Conditions \n";
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     s+=(ds.getKey()+" : "+ds.getValue(String.class)+"\n");
@@ -211,6 +215,10 @@ public void updateUi(){
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 packs=new ArrayList<>();
+                if (loading != null) {
+                    loading.clearAnimation();
+                    loading.setVisibility(View.INVISIBLE);
+                }
                 for(DataSnapshot ds:dataSnapshot.getChildren()){
                     pack p=new pack(ds.getValue(Long.class).toString(),ds.getKey());
                     packs.add(p);
@@ -294,11 +302,19 @@ Toast.makeText(items.this,"Hello",Toast.LENGTH_LONG).show();
             linearLayout.addView(containerCopy);}
     }
 
+    public void blink() {
+        Animation animation1 =
+                AnimationUtils.loadAnimation(getApplicationContext(),
+                        R.anim.blink);
+        loading.startAnimation(animation1);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
         getSupportActionBar().hide(); //hide the title bar
         setContentView(R.layout.activity_items);
+        loading = findViewById(R.id.Loading);
+        blink();
             }
 }
