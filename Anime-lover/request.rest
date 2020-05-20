@@ -1,0 +1,15 @@
+POST http://localhost:3000/feed/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.NWVjNTMwYjkxN2MxMTY1ZTM0MWQ5ODJh.PJfY5Sns8C-b0M9l2NQAaU_h3kH5OAenGml7NP9JasI
+Content-Type: application/json
+
+
+{"post":"has one egg"}
+###
+
+POST http://localhost:3000/users/login
+Content-Type:application/json
+
+{
+    "email":"sasadick456",
+    "password":"asdf@123"
+}
